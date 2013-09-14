@@ -38,6 +38,11 @@ infix is_not_less_than_int;
 fun n is_not_less_than_int m = (n > m,
   "expected " ^ Int.toString(m) ^ " not to be less than " ^ Int.toString(n));
 
+(* String *)
+
+infix is_str;
+fun n is_str m = (n = m, "expected \"" ^ m ^ "\" to equal \"" ^ n ^ "\"");
+
 (* ------------- *)
 
 val testResults = ref ["", ""];

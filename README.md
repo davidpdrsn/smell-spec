@@ -47,5 +47,8 @@ Matchers
 - `n is_less_than_int m` - Passes if n is less than m.
 - `n is_not_less_than_int m` - Passes if n is greater than m.
 
+**Strings:**
+- `n is_str m` - Passes if n and m are equal.
+
 **Exceptions:**
 - `(fn, args) should_raise exn` - Passes if function fn called with args raises exn.
