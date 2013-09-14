@@ -38,8 +38,6 @@ infix is_not_less_than_int;
 fun n is_not_less_than_int m = (n > m,
   "expected " ^ Int.toString(m) ^ " not to be less than " ^ Int.toString(n));
 
-(* String *)
-
 (* ------------- *)
 
 val testResults = ref ["", ""];
@@ -70,5 +68,3 @@ fun joinList [] = ""
   | joinList (x::xs) = x ^ joinList(xs);
 
 fun runTests () = print(joinList(!testResults) ^ "\n\n");
-
-(* ------------- *)
