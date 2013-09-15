@@ -13,9 +13,9 @@ fun fact 0 = 1
   | fact n = n * fact(n-1);
 
 describe("fact", [
-  this("finds the factorial of 5", fact(5) is_int 120),
-  this("finds the factorial of 0", fact(0) is_int 1),
-  this("finds the factorial of n", fact(10) is_int 20)
+  it_("finds the factorial of 5", fact(5) is_int 120),
+  it_("finds the factorial of 0", fact(0) is_int 1),
+  it_("finds the factorial of n", fact(10) is_int 20)
 ]);
 
 runTests();

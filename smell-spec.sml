@@ -67,7 +67,7 @@ fun describe (desc_text, x) =
     append(all_dots(x), all_failure_messages(x))
   end;
 
-fun this (text, assertion) = (text, assertion);
+fun it_ (text, assertion) = (text, assertion);
 
 fun joinList [] = ""
   | joinList (x::xs) = x ^ joinList(xs);
