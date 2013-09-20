@@ -43,6 +43,12 @@ fun n is_not_less_than_int m = (n > m,
 infix is_str;
 fun n is_str m = (n = m, "expected \"" ^ m ^ "\" to equal \"" ^ n ^ "\"");
 
+(* Booleans *)
+
+infix is_bool;
+fun n is_bool m = (n = m, "expected \"" ^ Bool.toString(m) ^ "\" to equal \"" ^
+  Bool.toString(n) ^ "\"");
+
 (* ------------- *)
 
 val testResults = ref ["", ""];
