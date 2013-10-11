@@ -69,4 +69,4 @@ Matchers
 
 **Exceptions:**
 
-- `Assert.raises (fn, exn)` - Passes if calling `fn` raises `exn`.
+- `Assert.raises (fn, exn)` - Passes if calling `fn()` raises `exn`.
