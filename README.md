@@ -18,22 +18,23 @@ Write some tests
 ```sml
 use "that_other_file_you_wrote";
 
-describe("fact", [
-  it_("finds the factorial of 5", fact(5) is_int 120),
-  it_("finds the factorial of 0", fact(0) is_int 1),
-  it_("finds the factorial of n", fact(10) is_int 20)
-]);
+val tests = [
+  Describe "my fact function" [
+    It "calculates fact of 0" (fn () => Assert.equal(fact 0, 1)),
+    It "calculates fact of 3" (fn () => Assert.equal(fact 3, 6)),
+    It "calculates fact of 4" (fn () => Assert.equal(fact 4, 2314234)),
+  ]
+]
 
-runTests();
+val _ = SmellSpec.runTests tests
 ```
 
-Run your file containing the tests.
+Run your file containing the tests and you'll see something like
 
 ```
 ..F
 
-FAIL: fact finds the factorial of n
-expected 20 to equal 3628800
+FAIL: my fact function, calculates fact of 4
 ```
 
 In top-level.
@@ -43,21 +44,5 @@ Matchers
 
 **For all types:**
 
-- `n is m` - Passes if n and m are equal (on all types).
-
-**For ints:**
-- `n is_int m` - Passes if n and m are equal.
-- `n is_not_int m` - Passes if n and m are two non-equal.
-- `n is_greater_than_int m` - Passes if n is greater than m.
-- `n is_not_greater_than_int m` - Passes if n is less than m.
-- `n is_less_than_int m` - Passes if n is less than m.
-- `n is_not_less_than_int m` - Passes if n is greater than m.
-
-**Strings:**
-- `n is_str m` - Passes if n and m are equal.
-
-**Booleans:**
-- `n is_bool m` - Passes if n and m are the same boolean.
-
-**Exceptions:**
-- `(f, args) should_raise exn` - Passes if function fn called with args raises exn.
+- `Assert.equal (n, m)` - Passes if n and m are equal (on all types).
+- `AssertNot.equal (n, m)` - Passes if n and m are not equal (on all types).
