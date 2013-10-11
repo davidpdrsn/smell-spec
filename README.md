@@ -6,11 +6,17 @@ smell-spec is a small testing framework for SML inspired by [rspec](https://gith
 Example
 -------
 
-```sml
-use "smell-spec";
+Write some sml
 
+```sml
 fun fact 0 = 1
   | fact n = n * fact(n-1);
+```
+
+Write some tests
+
+```sml
+use "that_other_file_you_wrote";
 
 describe("fact", [
   it_("finds the factorial of 5", fact(5) is_int 120),
@@ -19,9 +25,9 @@ describe("fact", [
 ]);
 
 runTests();
-
 ```
-You will then see something like:
+
+You will then see something like this:
 
 ```
 ..F
@@ -51,4 +57,4 @@ Matchers
 - `n is_str m` - Passes if n and m are equal.
 
 **Exceptions:**
-- `(fn, args) should_raise exn` - Passes if function fn called with args raises exn.
+- `(f, args) should_raise exn` - Passes if function fn called with args raises exn.
