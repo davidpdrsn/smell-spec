@@ -27,7 +27,7 @@ describe("fact", [
 runTests();
 ```
 
-You will then see something like this:
+Run your file containing the tests.
 
 ```
 ..F
@@ -55,6 +55,9 @@ Matchers
 
 **Strings:**
 - `n is_str m` - Passes if n and m are equal.
+
+**Booleans:**
+- `n is_bool m` - Passes if n and m are the same boolean.
 
 **Exceptions:**
 - `(f, args) should_raise exn` - Passes if function fn called with args raises exn.
