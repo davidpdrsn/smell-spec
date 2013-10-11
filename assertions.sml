@@ -3,14 +3,14 @@ struct
   fun equal (x, y) = ("expectation failed", x = y)
   fun greaterThan (x, y) = ("expectation failed", x > y)
   fun lessThan (x, y) = ("expectation failed", x < y)
-  fun raises (f, exc) =
-    let val excRaised = (f(); false) handle exc => true
-                                          | _   => false
-    in ("No exception raised", excRaised)
-    end
-end
 
-val foo = Assert.raises ((fn () => raise Fail "foo"), "foo")
+  fun raises (f, e) =
+    (f(); ("no exception was raised", false))
+    handle e' => if exnName e = exnName e'
+                 then ("", true)
+                 else ("expected "^exnName(e)^" to be raised but "^
+                 exnName(e')^" was", false)
+end
 
 structure AssertInt =
 struct
