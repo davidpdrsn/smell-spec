@@ -66,3 +66,7 @@ Matchers
 **Int list:**
 
 - `AssertIntList.equal (n, m)` - Passes if n and m are equal.
+
+**Exceptions:**
+
+- `Assert.raises (fn, exn)` - Passes if calling `fn` raises `exn`.
