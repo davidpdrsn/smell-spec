@@ -7,6 +7,8 @@ fun Describe str l = Describe' (str, l)
 structure Assert =
 struct
   fun equal (x, y) = x = y
+  fun greaterThan (x, y) = x > y
+  fun lessThan (x, y) = x < y
 end
 
 structure AssertNot =
