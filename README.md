@@ -22,7 +22,7 @@ val tests = [
   Describe "my fact function" [
     It "calculates fact of 0" (fn () => Assert.equal(fact 0, 1)),
     It "calculates fact of 3" (fn () => Assert.equal(fact 3, 6)),
-    It "calculates fact of 4" (fn () => Assert.equal(fact 4, 2314234)),
+    It "calculates fact of 4" (fn () => Assert.equal(fact 4, 2314234))
   ]
 ]
 
@@ -42,7 +42,27 @@ In top-level.
 Matchers
 --------
 
+*Note:* Using the assertions for specific types will give you better failure messages.
+
 **For all types:**
 
 - `Assert.equal (n, m)` - Passes if n and m are equal (on all types).
 - `AssertNot.equal (n, m)` - Passes if n and m are not equal (on all types).
+
+**Ints:**
+
+- `AssertInt.equal (n, m)` - Passes if n and m are two equal ints.
+- `AssertInt.greaterThan (n, m)` - Passes if n is greater than m.
+- `AssertInt.lessThan (n, m)` - Passes if n is less than m.
+
+**String:**
+
+- `AssertString.equal (n, m)` - Passes if n and m are equal.
+
+**String list:**
+
+- `AssertStringList.equal (n, m)` - Passes if n and m are equal.
+
+**Int list:**
+
+- `AssertIntList.equal (n, m)` - Passes if n and m are equal.
