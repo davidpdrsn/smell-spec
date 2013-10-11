@@ -3,6 +3,10 @@ struct
   fun equal (x, y) = ("expectation failed", x = y)
   fun greaterThan (x, y) = ("expectation failed", x > y)
   fun lessThan (x, y) = ("expectation failed", x < y)
+  fun raises (f, exc) =
+    let val excRaised = (f(); false) handle exc => true
+    in ("No exception raised", excRaised)
+    end
 end
 
 structure AssertInt =
