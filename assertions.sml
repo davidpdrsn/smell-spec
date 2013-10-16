@@ -5,68 +5,77 @@ structure Assert =
 struct
   fun equal (x, y) = if x = y then Passed
                      else Failed "expectation failed"
-  (* fun greaterThan (x, y) = ("expectation failed", x > y) *)
-  (* fun lessThan (x, y) = ("expectation failed", x < y) *)
 
-  (* fun raises (f, e) = *)
-  (*   (f(); ("no exception was raised", false)) *)
-  (*   handle e' => if exnName e = exnName e' *)
-  (*                then ("", true) *)
-  (*                else ("expected "^exnName(e)^" to be raised but "^ *)
-  (*                exnName(e')^" was", false) *)
+  fun greaterThan (x, y) = if x > y then Passed
+                           else Failed "expectation failed"
+
+  fun lessThan (x, y) = if x < y then Passed
+                        else Failed "expectation failed"
+
+  fun raises (f, e) =
+    (f(); Failed "no exception was raised")
+    handle e' => if exnName e = exnName e'
+                 then Passed
+                 else Failed ("expected "^exnName(e)^" to be raised but "^ exnName(e')^" was")
 end
 
-(* structure AssertInt = *)
-(* struct *)
-(*   fun equal (x, y) = *)
-(*     ("expected "^Int.toString(x)^" to equal "^Int.toString(y), x = y) *)
+structure AssertInt =
+struct
+  fun equal (x, y) =
+    if x = y then Passed
+    else Failed ("expected "^Int.toString(x)^" to equal "^Int.toString(y))
 
-(*   fun greaterThan (x, y) = *)
-(*     ("expected "^Int.toString(x)^" to be greater than "^Int.toString(y), x > y) *)
+  fun greaterThan (x, y) =
+    if x > y then Passed
+    else Failed ("expected "^Int.toString(x)^" to be greater than "^Int.toString(y))
 
-(*   fun lessThan (x, y) = *)
-(*     ("expected "^Int.toString(x)^" to equal "^Int.toString(y), x < y) *)
-(* end *)
+  fun lessThan (x, y) =
+    if x < y then Passed
+    else Failed ("expected "^Int.toString(x)^" to equal "^Int.toString(y))
+end
 
-(* structure AssertString = *)
-(* struct *)
-(*   fun equal (x, y) = *)
-(*     ("expected \""^x^"\" to equal \""^y^"\"", x = y) *)
-(* end *)
+structure AssertString =
+struct
+  fun equal (x, y) =
+    if x = y then Passed
+    else Failed ("expected \""^x^"\" to equal \""^y^"\"")
+end
 
-(* local *)
-(*   fun removeLastChar "" = "" *)
-(*     | removeLastChar s  = *)
-(*       let val chars = explode(s) *)
-(*       in implode (List.take (chars, length(chars)-1)) *)
-(*       end *)
+local
+  fun removeLastChar "" = ""
+    | removeLastChar s  =
+      let val chars = explode(s)
+      in implode (List.take (chars, length(chars)-1))
+      end
 
-(*   fun stringListToString l = *)
-(*     let *)
-(*       val values = *)
-(*         removeLastChar(removeLastChar(foldl (fn (x, acc) => acc^"\""^x^"\""^", ") "" l)) *)
-(*     in *)
-(*       "["^values^"]" *)
-(*     end *)
-(* in *)
-(*   structure AssertStringList = *)
-(*   struct *)
-(*     fun equal (x, y) = *)
-(*       ("expected "^stringListToString(x)^" to equal "^stringListToString(y), x = y) *)
-(*   end *)
+  fun stringListToString l =
+    let
+      val values =
+        removeLastChar(removeLastChar(foldl (fn (x, acc) => acc^"\""^x^"\""^", ") "" l))
+    in
+      "["^values^"]"
+    end
+in
+  structure AssertStringList =
+  struct
+    fun equal (x, y) =
+      if x = y then Passed
+      else Failed ("expected "^stringListToString(x)^" to equal "^stringListToString(y))
+  end
 
-(*   fun intListToString l = *)
-(*     let *)
-(*       val values = *)
-(*         removeLastChar(removeLastChar(foldl (fn (x, acc) => *)
-(*         acc^"\""^Int.toString(x)^"\""^", ") "" l)) *)
-(*     in *)
-(*       "["^values^"]" *)
-(*     end *)
+  fun intListToString l =
+    let
+      val values =
+        removeLastChar(removeLastChar(foldl (fn (x, acc) =>
+        acc^"\""^Int.toString(x)^"\""^", ") "" l))
+    in
+      "["^values^"]"
+    end
 
-(*   structure AssertIntList = *)
-(*   struct *)
-(*     fun equal (x, y) = *)
-(*       ("expected "^intListToString(x)^" to equal "^intListToString(y), x = y) *)
-(*   end *)
-(* end *)
+  structure AssertIntList =
+  struct
+    fun equal (x, y) =
+      if x = y then Passed
+      else Failed ("expected "^intListToString(x)^" to equal "^intListToString(y))
+  end
+end
