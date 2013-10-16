@@ -16,11 +16,13 @@ fun fact 0 = 1
 Write some tests
 
 ```sml
-use "that_other_file_you_wrote";
+use "./file_containing_fact_function.sml";
 
 val tests = [
   Describe "my fact function" [
-    It "calculates fact of 0" (fn () => Assert.equal(fact 0, 1)),
+    When "given 0 as argument" [
+      It "calculates fact of 0" (fn () => Assert.equal(fact 0, 1))
+    ],
     It "calculates fact of 3" (fn () => Assert.equal(fact 3, 6)),
     It "calculates fact of 4" (fn () => Assert.equal(fact 4, 2314234))
   ]
@@ -29,12 +31,19 @@ val tests = [
 val _ = SmellSpec.runTests tests
 ```
 
+You can use `Describe`, `When` and `It` blocks to spec out your functions. `Describe` and `When` can be nested within each other, as long as there is an `It` at the end.
+
 Run your file containing the tests and you'll see something like
 
 ```
+Test results
+
 ..F
 
-FAIL: my fact function, calculates fact of 4
+FAIL: my fact function calculates fact of 4
+expectation failed
+
+3 tests ran in 0 milliseconds
 ```
 
 In top-level.
