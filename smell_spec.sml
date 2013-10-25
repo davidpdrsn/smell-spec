@@ -1,5 +1,3 @@
-use "./assertions.sml";
-
 datatype spec = It' of (string * (unit -> assertionResult))
               | Describe' of (string * spec list)
               | When' of (string * spec list)

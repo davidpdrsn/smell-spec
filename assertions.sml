@@ -12,6 +12,12 @@ struct
   fun lessThan (x, y) = if x < y then Passed
                         else Failed "expectation failed"
 
+  fun truthy x = if x then Passed
+                 else Failed "expected false to be true"
+
+  fun falsy x = if not x then Passed
+                else Failed "expected true to be false"
+
   fun raises (f, e) =
     (f(); Failed "no exception was raised")
     handle e' => if exnName e = exnName e'
