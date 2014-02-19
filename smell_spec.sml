@@ -87,9 +87,9 @@ struct
         ; print "\n\n"
         ; print msgs
         ; print (numberOfTests^" "^(if numberOfTests = "1" then "test" else "tests"))
-        ; print (" ran in ")
+        (*; print (" ran in ")
         ; print (Int.toString (Time.toMilliseconds(Timer.checkRealTimer timer)))
-        ; print (" milliseconds")
+        ; print (" milliseconds")*)
         ; print "\n\n"
         )
       end
