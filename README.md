@@ -3,6 +3,8 @@ smell-spec
 
 smell-spec is a small testing framework for SML inspired by [rspec](https://github.com/dchelimsky/rspec).
 
+**Note:** This has only been tested with [Moscow ML](https://github.com/kfl/mosml).
+
 Example
 -------
 
