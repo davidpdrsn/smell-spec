@@ -45,7 +45,7 @@ Test results
 FAIL: my fact function calculates fact of 4
 expectation failed
 
-3 tests ran in 0 milliseconds
+3 tests
 ```
 
 In top-level.

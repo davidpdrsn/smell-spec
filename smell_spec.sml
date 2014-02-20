@@ -77,7 +77,6 @@ struct
       let
         val dots = foldl (fn (x, acc) => acc^(makeDot x)) "" tests
         val msgs = foldl (fn (x, acc) => acc^(makeMsg x)) "" tests
-        val timer = Timer.startRealTimer()
         val numberOfTests = Int.toString(numberOfTests tests)
       in
         (
@@ -87,9 +86,6 @@ struct
         ; print "\n\n"
         ; print msgs
         ; print (numberOfTests^" "^(if numberOfTests = "1" then "test" else "tests"))
-        (*; print (" ran in ")
-        ; print (Int.toString (Time.toMilliseconds(Timer.checkRealTimer timer)))
-        ; print (" milliseconds")*)
         ; print "\n\n"
         )
       end
