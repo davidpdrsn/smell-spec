@@ -40,6 +40,21 @@ struct
     else Failed ("expected "^Int.toString(x)^" to equal "^Int.toString(y))
 end
 
+structure AssertReal =
+struct
+  fun equal (x, y) =
+    if Real.compare(x, y) = EQUAL then Passed
+    else Failed ("expected "^Real.toString(x)^" to equal "^Real.toString(y))
+
+  fun greaterThan (x, y) =
+    if Real.compare(x, y) = GREATER then Passed
+    else Failed ("expected "^Real.toString(x)^" to be greater than "^Real.toString(y))
+
+  fun lessThan (x, y) =
+    if Real.compare(x, y) = LESS then Passed
+    else Failed ("expected "^Real.toString(x)^" to be less than "^Real.toString(y))
+end
+
 structure AssertString =
 struct
   fun equal (x, y) =
