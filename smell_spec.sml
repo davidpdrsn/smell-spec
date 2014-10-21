@@ -39,14 +39,14 @@ struct
             | messageForTest {result=(Failed msg), ctxt="", ...} = msg ^ "\n"
             | messageForTest {result=(Failed msg), ctxt=ctxt, test=_} = ctxt ^ ": " ^ msg ^ "\n"
       in
-        foldl (op ^) "" (map messageForTest testsWithResults)
+        foldr (op ^) "" (map messageForTest testsWithResults)
       end
 
     fun constructDots results =
       let fun dotForResult Passed = "."
             | dotForResult (Failed _) = "F"
       in
-        foldl (op ^) "" (map dotForResult results)
+        foldr (op ^) "" (map dotForResult results)
       end
 
   in
