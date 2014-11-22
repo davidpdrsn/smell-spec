@@ -9,84 +9,64 @@ fun When x y = When' (x, y)
 structure SmellSpec =
 struct
   local
-    fun msgForAssertion ((str, f), desc, acc) =
-      case f() of
-           Passed => acc
-         | Failed msg => acc^"FAIL: "^desc^str^"\n"^msg^"\n\n"
+    (* Slightly smarter string concatenation *)
+    fun cat ("", b) = b
+      | cat (a, "") = a
+      | cat (a, b) = a ^ " " ^ b
 
-    fun dotForAssertion ((str, f), acc) =
-      case f() of
-           Passed => acc^"."
-         | Failed msg => acc^"F"
+    (* Flattens a tree structure of tests into a linear list *)
+    fun flattenTests (tests: spec list) =
+      let
+        fun flatMap (f, l) = List.concat(List.map f l)
+        fun flattenWithContext (t: spec, ctxt: string) =
+          case t of
+               It' (msg, test) => [{ctxt=cat(ctxt, msg), test=test}]
+             | Describe' (what, subtests) => flatMap(
+                 (fn t => flattenWithContext(t, cat(ctxt, what))),
+                 subtests)
+             | When' (subcontext, subtests) => flatMap(
+                 (fn t => flattenWithContext(t, cat(ctxt, subcontext))),
+                 subtests)
+      in
+        flatMap((fn t => flattenWithContext(t, "")), tests)
+      end
 
-    local
-      fun process (desc, tests) =
-        let
-          fun s "" = ""
-            | s x = x^" "
-          fun helper' (desc, [], acc, prevDesc) = raise Domain
-            | helper' (desc, test::tests, acc, prevDesc) =
-              acc^
-              helper((test, ""), s(prevDesc)^desc^" ")^
-              (foldl (fn (x, acc) => acc^helper((x, ""), s(prevDesc)^desc)) "" tests)
-          and helper ((It' x, acc), prevDesc) = msgForAssertion (x, desc^" "^prevDesc, acc)
-            | helper ((Describe' (desc, tests), acc), prevDesc) =
-              helper' (desc, tests, acc, prevDesc)
-            | helper ((When' (desc, tests), acc), prevDesc) =
-              helper' (desc, tests, acc, prevDesc)
-        in
-          foldl (fn (x, acc) => acc^helper((x, ""), "")) "" tests
-        end
+    fun runSingleTest f =
+      f() handle error => Failed ("raised " ^ exnMessage(error))
 
-      fun makeMsg' (It' x) = msgForAssertion (x, "", "")
-        | makeMsg' (Describe' (desc, tests)) = process (desc, tests)
-        | makeMsg' (When' (desc, tests)) = process (desc, tests)
-    in
-      fun makeMsg x = makeMsg' x
-    end
+    fun constructMessages testsWithResults =
+      let fun messageForTest {result=Passed, ...} = ""
+            | messageForTest {result=(Failed msg), ctxt="", ...} = msg ^ "\n"
+            | messageForTest {result=(Failed msg), ctxt=ctxt, test=_} = ctxt ^ ": " ^ msg ^ "\n"
+      in
+        foldr (op ^) "" (map messageForTest testsWithResults)
+      end
 
-    local
-      fun helper (desc, tests) =
-        let
-          fun foo (desc, [], acc) = acc
-            | foo (desc, test::tests, acc) =
-              acc^helper'(test, "")^(foldl helper' "" tests)
-          and helper' (It' x, acc) = dotForAssertion (x, acc)
-            | helper' (Describe' (desc, tests), acc) = foo (desc, tests, acc)
-            | helper' (When' (desc, tests), acc) = foo (desc, tests, acc)
-        in
-          foldl helper' "" tests
-        end
-      and makeDot' (It' x) = dotForAssertion (x, "")
-        | makeDot' (Describe' (desc, tests)) = helper (desc, tests)
-        | makeDot' (When' (desc, tests)) = helper (desc, tests)
-    in
-      fun makeDot x = makeDot' x
-    end
+    fun constructDots results =
+      let fun dotForResult Passed = "."
+            | dotForResult (Failed _) = "F"
+      in
+        foldr (op ^) "" (map dotForResult results)
+      end
 
-    local
-      fun h x = foldl (fn (x, acc) => numberOfIts(x)+acc) 0 x
-      and numberOfIts (It' _) = 1
-        | numberOfIts (Describe' (_, x)) = h x
-        | numberOfIts (When' (_, x)) = h x
-    in
-      fun numberOfTests x = foldl (fn (x, acc) => acc+numberOfIts(x)) 0 x
-    end
   in
     fun runTests tests =
       let
-        val dots = foldl (fn (x, acc) => acc^(makeDot x)) "" tests
-        val msgs = foldl (fn (x, acc) => acc^(makeMsg x)) "" tests
-        val numberOfTests = Int.toString(numberOfTests tests)
+        val flattenedTests = flattenTests tests
+        val results = (map runSingleTest (map #test flattenedTests))
+        val testsWithResults = (map
+          (fn (a, b) => {ctxt=(#ctxt a), test=(#test a), result=b})
+          (ListPair.zip(flattenedTests, results)))
+        val dots = constructDots results
+        val messages = constructMessages testsWithResults
+        val numberOfTests = length flattenedTests
       in
         (
           print "\n"
         ; print "Test results\n\n"
-        ; print dots
-        ; print "\n\n"
-        ; print msgs
-        ; print (numberOfTests^" "^(if numberOfTests = "1" then "test" else "tests"))
-        ; print "\n\n"
+        ; print (dots ^ "\n\n")
+        ; print (messages ^ "\n")
+        ; print (Int.toString(numberOfTests) ^ " " ^ (if numberOfTests = 1 then "test" else "tests") ^ "\n")
         )
       end
   end
